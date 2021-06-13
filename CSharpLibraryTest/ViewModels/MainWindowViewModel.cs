@@ -1,15 +1,11 @@
 ﻿using Prism.Mvvm;
+using Reactive.Bindings;
 
 namespace CSharpLibraryTest.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string _title = "Prism Application";
-        public string Title
-        {
-            get { return _title; }
-            set { SetProperty(ref _title, value); }
-        }
+        public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>("CSharpLibraryTest");
 
         public MainWindowViewModel()
         {

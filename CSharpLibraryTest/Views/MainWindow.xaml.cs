@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Reactive.Bindings;
+using System.Windows;
 
 namespace CSharpLibraryTest.Views
 {
@@ -7,9 +8,11 @@ namespace CSharpLibraryTest.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
+
         }
     }
 }

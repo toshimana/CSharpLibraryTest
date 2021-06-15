@@ -1,23 +1,18 @@
 ﻿using Reactive.Bindings;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CSharpUserControlLibrary
 {
     /// <summary>
     /// PathLoader.xaml の相互作用ロジック
     /// </summary>
-    public partial class PathLoader : UserControl
+    public partial class PathLoader : System.Windows.Controls.UserControl
     {
         public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register(nameof(Title), typeof(string), typeof(PathLoader), new PropertyMetadata("", OnTitleChanged));
@@ -31,7 +26,7 @@ namespace CSharpUserControlLibrary
             PathLoader ctrl = obj as PathLoader;
             if (ctrl != null)
             {
-                ctrl.Title = e.NewValue as string;
+                ctrl.PathTitle.Content = e.NewValue as string;
             }
         }
 
@@ -47,7 +42,7 @@ namespace CSharpUserControlLibrary
             PathLoader ctrl = obj as PathLoader;
             if (ctrl != null)
             {
-                ctrl.Path = e.NewValue as string;
+                ctrl.PathTextBox.Text = e.NewValue as string;
             }
         }
 
@@ -62,8 +57,26 @@ namespace CSharpUserControlLibrary
         public PathLoader()
         {
             InitializeComponent();
+
+
+            IObservable<RoutedEventArgs> observable = Observable.FromEvent<RoutedEventHandler, RoutedEventArgs>(
+                h => (s, e) => h(e),
+                h => PathFindButton.Click += h,
+                h => PathFindButton.Click -= h);
+
+            observable.Subscribe(FindPath);
         }
 
+        private void FindPath(RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog();
 
+            dialog.InitialDirectory = Directory.GetParent(PathTextBox.Text).FullName;
+            dialog.Filter = "PNG|*.png|JPEG|*.jpg";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                Path = dialog.FileName;
+            }
+        }
     }
 }

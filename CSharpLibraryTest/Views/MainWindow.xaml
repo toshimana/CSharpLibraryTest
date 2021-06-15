@@ -6,7 +6,7 @@
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="{Binding Title.Value}" Height="350" Width="525" >
     <StackPanel HorizontalAlignment="Stretch">
-        <uc:PathLoader Path.Value="{Binding ImagePath.Value}"/>
+        <uc:PathLoader Title="Image Path" Path="aaa"/>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
     </StackPanel>
 </Window>

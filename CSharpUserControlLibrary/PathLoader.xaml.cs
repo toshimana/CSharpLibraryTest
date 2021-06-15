@@ -19,11 +19,51 @@ namespace CSharpUserControlLibrary
     /// </summary>
     public partial class PathLoader : UserControl
     {
-        public ReactiveProperty<string> Path { get; } = new ReactiveProperty<string>("");
+        public static readonly DependencyProperty TitleProperty =
+            DependencyProperty.Register(nameof(Title), typeof(string), typeof(PathLoader), new PropertyMetadata("", OnTitleChanged));
+        public string Title
+        {
+            get { return (string)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
+        }
+        public static void OnTitleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            PathLoader ctrl = obj as PathLoader;
+            if (ctrl != null)
+            {
+                ctrl.Title = e.NewValue as string;
+            }
+        }
+
+        public static readonly DependencyProperty PathProperty =
+            DependencyProperty.Register(nameof(Path), typeof(string), typeof(PathLoader), new PropertyMetadata("", OnPathChanged));
+        public string Path
+        {
+            get { return (string)GetValue(PathProperty); }
+            set { SetValue(PathProperty, value); }
+        }
+        public static void OnPathChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            PathLoader ctrl = obj as PathLoader;
+            if (ctrl != null)
+            {
+                ctrl.Path = e.NewValue as string;
+            }
+        }
+
+        public ICommand LoadCommand
+        {
+            get { return (ICommand)GetValue(LoadCommandProperty); }
+            set { SetValue(LoadCommandProperty, value); }
+        }
+        public static readonly DependencyProperty LoadCommandProperty =
+            DependencyProperty.Register(nameof(LoadCommand), typeof(ICommand), typeof(PathLoader), new PropertyMetadata(null));
 
         public PathLoader()
         {
             InitializeComponent();
         }
+
+
     }
 }

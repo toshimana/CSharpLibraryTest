@@ -5,8 +5,13 @@
         xmlns:uc="clr-namespace:CSharpUserControlLibrary;assembly=CSharpUserControlLibrary"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="{Binding Title.Value}" Height="350" Width="525" >
-    <StackPanel HorizontalAlignment="Stretch">
-        <uc:PathLoader Title="Image Path" Path="aaa"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <uc:PathLoader Grid.Row="0" Grid.Column="0" x:Name="ImagePath" Path="aaa" LoadCommand="{Binding LoadCommandA}"/>
+        <uc:CvImage Grid.Row="1" Grid.Column="0"/>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
-    </StackPanel>
+    </Grid>
 </Window>

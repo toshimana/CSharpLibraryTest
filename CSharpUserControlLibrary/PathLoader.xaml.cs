@@ -46,18 +46,17 @@ namespace CSharpUserControlLibrary
             }
         }
 
+        public static readonly DependencyProperty LoadCommandProperty =
+            DependencyProperty.Register(nameof(LoadCommand), typeof(ICommand), typeof(PathLoader), new PropertyMetadata(null));
         public ICommand LoadCommand
         {
             get { return (ICommand)GetValue(LoadCommandProperty); }
             set { SetValue(LoadCommandProperty, value); }
         }
-        public static readonly DependencyProperty LoadCommandProperty =
-            DependencyProperty.Register(nameof(LoadCommand), typeof(ICommand), typeof(PathLoader), new PropertyMetadata(null));
 
         public PathLoader()
         {
             InitializeComponent();
-
 
             IObservable<RoutedEventArgs> observable = Observable.FromEvent<RoutedEventHandler, RoutedEventArgs>(
                 h => (s, e) => h(e),

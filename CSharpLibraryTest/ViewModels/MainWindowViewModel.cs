@@ -1,6 +1,8 @@
-﻿using Prism.Mvvm;
+﻿using OpenCvSharp;
+using Prism.Mvvm;
 using Reactive.Bindings;
 using System;
+using System.Windows;
 
 namespace CSharpLibraryTest.ViewModels
 {
@@ -10,15 +12,32 @@ namespace CSharpLibraryTest.ViewModels
         public ReactiveProperty<string> Path { get; } = new ReactiveProperty<string>("aaa");
         public ReactiveCommand LoadCommandA { get; } = new ReactiveCommand();
 
+        public ReactiveProperty<Mat> Image { get; } = new ReactiveProperty<Mat>();
+
+        private Func<MessageBoxResult> PathLoadFailDialog = () => MessageBoxResult.OK;
+
+
+
         public MainWindowViewModel()
         {
             LoadCommandA.Subscribe(PathLoad);
         }
 
+        public void Initialize(Func<MessageBoxResult> pathLoadFailDialog)
+        {
+            PathLoadFailDialog = pathLoadFailDialog;
+        }
+
         private void PathLoad()
         {
-            int count = 0;
-            ++count;
+            Mat m = new Mat(Path.Value);
+            if (m.Empty())
+            {
+                PathLoadFailDialog();
+                return;
+            }
+
+            Image.Value = m;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Reactive.Bindings;
+﻿using CSharpLibraryTest.ViewModels;
+using Reactive.Bindings;
 using System.Windows;
 
 namespace CSharpLibraryTest.Views
@@ -13,6 +14,8 @@ namespace CSharpLibraryTest.Views
         {
             InitializeComponent();
 
+            var vm = DataContext as MainWindowViewModel;
+            vm.Initialize(()=>MessageBox.Show("読み込みに失敗しました", "画像読み込み失敗", MessageBoxButton.OK, MessageBoxImage.Warning));
         }
     }
 }

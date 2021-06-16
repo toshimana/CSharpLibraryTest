@@ -10,8 +10,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <uc:PathLoader Grid.Row="0" Grid.Column="0" x:Name="ImagePath" Path="aaa" LoadCommand="{Binding LoadCommandA}"/>
-        <uc:CvImage Grid.Row="1" Grid.Column="0"/>
+        <uc:PathLoader Grid.Row="0" Grid.Column="0" Path="{Binding Path.Value, Mode=TwoWay}" LoadCommand="{Binding LoadCommandA}"/>
+        <uc:CvImage Grid.Row="1" Grid.Column="0" MatImage="{Binding Image.Value}"/>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
     </Grid>
 </Window>

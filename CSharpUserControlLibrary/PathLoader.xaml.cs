@@ -74,7 +74,7 @@ namespace CSharpUserControlLibrary
             dialog.Filter = "PNG|*.png|JPEG|*.jpg";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                Path = dialog.FileName;
+                PathTextBox.Text = dialog.FileName;
             }
         }
     }

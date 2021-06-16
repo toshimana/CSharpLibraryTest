@@ -14,7 +14,7 @@
         </Grid.ColumnDefinitions>
         <Label x:Name="PathTitle" Grid.Row="0" Grid.Column="0" Content="{Binding Title, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         <TextBox x:Name="PathTextBox" Grid.Row="0" Grid.Column="1" Text="{Binding Path, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-        <Button x:Name="PathFindButton" Grid.Row="0" Grid.Column="2" Content="..." Command="{Binding PathFindCommand}"/>
-        <Button x:Name="LoadButton" Grid.Row="0" Grid.Column="3" Content="Load" Command="{Binding LoadCommand, ElementName=root}"/>
+        <Button x:Name="PathFindButton" Grid.Row="0" Grid.Column="2" Content="..."/>
+        <Button x:Name="LoadButton" Grid.Row="0" Grid.Column="3" Content="Load" Command="{Binding LoadCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
     </Grid>
 </UserControl>

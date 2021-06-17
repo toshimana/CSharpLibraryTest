@@ -15,35 +15,27 @@ namespace CSharpUserControlLibrary
     public partial class PathLoader : System.Windows.Controls.UserControl
     {
         public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register(nameof(Title), typeof(string), typeof(PathLoader), new PropertyMetadata("", OnTitleChanged));
+            DependencyProperty.Register(nameof(Title), typeof(string), typeof(PathLoader), new PropertyMetadata(""));
         public string Title
         {
             get { return (string)GetValue(TitleProperty); }
             set { SetValue(TitleProperty, value); }
         }
-        public static void OnTitleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
-        {
-            PathLoader ctrl = obj as PathLoader;
-            if (ctrl != null)
-            {
-                ctrl.PathTitle.Content = e.NewValue as string;
-            }
-        }
 
         public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register(nameof(Path), typeof(string), typeof(PathLoader), new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnPathChanged));
+            DependencyProperty.Register(nameof(Path), typeof(string), typeof(PathLoader), new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         public string Path
         {
             get { return (string)GetValue(PathProperty); }
             set { SetValue(PathProperty, value); }
         }
-        public static void OnPathChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+
+        public static readonly DependencyProperty PathFilterProperty =
+            DependencyProperty.Register(nameof(PathFilter), typeof(string), typeof(PathLoader), new PropertyMetadata("*|*.*"));
+        public string PathFilter
         {
-            PathLoader ctrl = obj as PathLoader;
-            if (ctrl != null)
-            {
-                ctrl.PathTextBox.Text = e.NewValue as string;
-            }
+            get { return (string)GetValue(PathFilterProperty); }
+            set { SetValue(PathFilterProperty, value); }
         }
 
         public static readonly DependencyProperty LoadCommandProperty =
@@ -74,7 +66,7 @@ namespace CSharpUserControlLibrary
             if (currentPath.Length == 0) currentPath = ".";
             string fullPath = System.IO.Path.GetFullPath(currentPath);
             dialog.InitialDirectory = Directory.GetParent(fullPath).FullName;
-            dialog.Filter = "PNG|*.png|JPEG|*.jpg";
+            dialog.Filter = PathFilter;
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 PathTextBox.Text = dialog.FileName;

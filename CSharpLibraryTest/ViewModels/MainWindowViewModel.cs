@@ -9,8 +9,10 @@ namespace CSharpLibraryTest.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>("CSharpLibraryTest");
-        public ReactiveProperty<string> Path { get; } = new ReactiveProperty<string>("");
-        public ReactiveCommand LoadCommandA { get; } = new ReactiveCommand();
+        public ReactiveProperty<string> ImagePath { get; } = new ReactiveProperty<string>("");
+        public ReactiveCommand ImageLoadCommand { get; } = new ReactiveCommand();
+        public ReactiveProperty<string> ModelPath { get; } = new ReactiveProperty<string>("");
+        public ReactiveCommand ModelLoadCommand { get; } = new ReactiveCommand();
 
         public ReactiveProperty<Mat> Image { get; } = new ReactiveProperty<Mat>();
         public ReactiveProperty<Mat> WideImage { get; } = new ReactiveProperty<Mat>();
@@ -21,7 +23,8 @@ namespace CSharpLibraryTest.ViewModels
 
         public MainWindowViewModel()
         {
-            LoadCommandA.Subscribe(PathLoad);
+            ImageLoadCommand.Subscribe(LoadImage);
+            ModelLoadCommand.Subscribe(LoadModel);
         }
 
         public void Initialize(Func<MessageBoxResult> pathLoadFailDialog)
@@ -29,9 +32,9 @@ namespace CSharpLibraryTest.ViewModels
             PathLoadFailDialog = pathLoadFailDialog;
         }
 
-        private void PathLoad()
+        private void LoadImage()
         {
-            Mat m = new Mat(Path.Value);
+            Mat m = new Mat(ImagePath.Value);
             if (m.Empty())
             {
                 PathLoadFailDialog();
@@ -40,6 +43,11 @@ namespace CSharpLibraryTest.ViewModels
 
             Image.Value = m;
             WideImage.Value = m;
+        }
+        
+        private void LoadModel()
+        {
+
         }
     }
 }

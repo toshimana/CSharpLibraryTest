@@ -13,6 +13,7 @@ namespace CSharpLibraryTest.ViewModels
         public ReactiveCommand LoadCommandA { get; } = new ReactiveCommand();
 
         public ReactiveProperty<Mat> Image { get; } = new ReactiveProperty<Mat>();
+        public ReactiveProperty<Mat> WideImage { get; } = new ReactiveProperty<Mat>();
 
         private Func<MessageBoxResult> PathLoadFailDialog = () => MessageBoxResult.OK;
 
@@ -38,6 +39,7 @@ namespace CSharpLibraryTest.ViewModels
             }
 
             Image.Value = m;
+            WideImage.Value = m;
         }
     }
 }

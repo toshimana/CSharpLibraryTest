@@ -9,9 +9,24 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <uc:PathLoader Grid.Row="0" Grid.Column="0" Title="ImagePath" Path="{Binding Path.Value}" LoadCommand="{Binding LoadCommandA}"/>
-        <uc:CvImage Grid.Row="1" Grid.Column="0" MatImage="{Binding Image.Value}"/>
-        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <uc:CvImage Grid.Column="0" MatImage="{Binding Image.Value}"/>
+                <uc:CvImage Grid.Column="1" MatImage="{Binding WideImage.Value}" MatStretch="Fill"/>
+            </Grid>
+            
+        </Grid>
+        <ContentControl Grid.Row="2" prism:RegionManager.RegionName="ContentRegion" />
     </Grid>
 </Window>

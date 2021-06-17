@@ -37,6 +37,16 @@ namespace CSharpUserControlLibrary
                 ctrl.ImageControl.Source = source;
             }
         }
+
+        public static readonly DependencyProperty StretchProperty =
+            DependencyProperty.Register(nameof(MatStretch), typeof(Stretch), typeof(CvImage), new PropertyMetadata(Stretch.Uniform));
+
+        public Stretch MatStretch
+        {
+            get { return (Stretch)GetValue(StretchProperty); }
+            set { SetValue(StretchProperty, value); }
+        }
+
         public CvImage()
         {
             InitializeComponent();

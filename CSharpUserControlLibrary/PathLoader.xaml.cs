@@ -31,7 +31,7 @@ namespace CSharpUserControlLibrary
         }
 
         public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register(nameof(Path), typeof(string), typeof(PathLoader), new PropertyMetadata("", OnPathChanged));
+            DependencyProperty.Register(nameof(Path), typeof(string), typeof(PathLoader), new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnPathChanged));
         public string Path
         {
             get { return (string)GetValue(PathProperty); }
@@ -70,7 +70,10 @@ namespace CSharpUserControlLibrary
         {
             var dialog = new OpenFileDialog();
 
-            dialog.InitialDirectory = Directory.GetParent(PathTextBox.Text).FullName;
+            string currentPath = PathTextBox.Text;
+            if (currentPath.Length == 0) currentPath = ".";
+            string fullPath = System.IO.Path.GetFullPath(currentPath);
+            dialog.InitialDirectory = Directory.GetParent(fullPath).FullName;
             dialog.Filter = "PNG|*.png|JPEG|*.jpg";
             if (dialog.ShowDialog() == DialogResult.OK)
             {

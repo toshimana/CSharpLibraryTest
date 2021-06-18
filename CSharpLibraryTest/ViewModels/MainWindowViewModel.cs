@@ -3,6 +3,7 @@ using Prism.Mvvm;
 using Reactive.Bindings;
 using System;
 using System.Windows;
+using System.Windows.Media.Media3D;
 
 namespace CSharpLibraryTest.ViewModels
 {
@@ -47,7 +48,13 @@ namespace CSharpLibraryTest.ViewModels
         
         private void LoadModel()
         {
-
+            var reader = new HelixToolkit.Wpf.StLReader();
+            var mgs = reader.Read(ModelPath.Value);
+            foreach (var model in mgs.Children)
+            {
+                var m = model as GeometryModel3D;
+                var meshs = m.Geometry as MeshGeometry3D;
+            }
         }
     }
 }

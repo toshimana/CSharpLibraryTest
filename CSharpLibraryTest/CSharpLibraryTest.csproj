@@ -5,6 +5,9 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>CSharpLibraryTest</AssemblyName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>5</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="HelixToolkit.Core.Wpf" Version="2.16.1" />
     <PackageReference Include="OpenTK.GLWpfControl" Version="4.1.0" />

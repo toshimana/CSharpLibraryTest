@@ -5,8 +5,13 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>5</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="OpenCvSharp4.Windows" Version="4.5.2.20210404" />
+    <PackageReference Include="OpenTK.GLWpfControl" Version="4.1.0" />
     <PackageReference Include="ReactiveProperty.WPF" Version="7.11.0" />
   </ItemGroup>
 

@@ -4,6 +4,7 @@ using Reactive.Bindings;
 using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
 namespace CSharpLibraryTest.ViewModels
@@ -21,12 +22,27 @@ namespace CSharpLibraryTest.ViewModels
 
         private Func<MessageBoxResult> PathLoadFailDialog = () => MessageBoxResult.OK;
 
-        public Model3DGroup TargetModel3DGroup = null;
+        public ReactiveProperty<Camera> Camera { get; } = new ReactiveProperty<Camera>();
+        public ReactiveProperty<Model3D> Light { get; } = new ReactiveProperty<Model3D>();
+
+        public ReactiveProperty<Model3D> ModelData { get; } = new ReactiveProperty<Model3D>();
 
         public MainWindowViewModel()
         {
             ImageLoadCommand.Subscribe(LoadImage);
             ModelLoadCommand.Subscribe(LoadModel);
+
+            PerspectiveCamera camera = new PerspectiveCamera();
+            camera.Position = new Point3D(0, 0, 2000);
+            camera.LookDirection = new Vector3D(0, 0, -1);
+            camera.FieldOfView = 60;
+
+            Camera.Value = camera;
+
+            DirectionalLight light = new DirectionalLight();
+            light.Color = Colors.White;
+            light.Direction = new Vector3D(0, 0, -1);
+            Light.Value = light;
         }
 
         public void Initialize(Func<MessageBoxResult> pathLoadFailDialog)
@@ -53,12 +69,8 @@ namespace CSharpLibraryTest.ViewModels
             if (!File.Exists(ModelPath.Value)) return;
 
             var reader = new HelixToolkit.Wpf.StLReader();
-            TargetModel3DGroup = reader.Read(ModelPath.Value);
-            foreach (var model in TargetModel3DGroup.Children)
-            {
-                var m = model as GeometryModel3D;
-                var meshs = m.Geometry as MeshGeometry3D;
-            }
+            var ms = reader.Read(ModelPath.Value);
+            ModelData.Value = ms.Children[0];
         }
     }
 }

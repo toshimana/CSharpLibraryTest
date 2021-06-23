@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 
 namespace CSharpLibraryTest.ViewModels
@@ -79,7 +80,15 @@ namespace CSharpLibraryTest.ViewModels
 
             var reader = new HelixToolkit.Wpf.StLReader();
             var ms = reader.Read(ModelPath.Value);
-            ModelData.Value = ms.Children[0];
+            var gms = ms.Children[0] as GeometryModel3D;
+
+            ImageBrush ib = new ImageBrush();
+            ib.ImageSource = new BitmapImage(new Uri(@"Image\Color.png", UriKind.Relative));
+            DiffuseMaterial dm = new DiffuseMaterial(ib);
+
+            gms.Material = dm;
+
+            ModelData.Value = gms;
         }
 
 

@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using HelixToolkit.Wpf;
+using OpenCvSharp;
 using Prism.Mvvm;
 using Reactive.Bindings;
 using System;
@@ -28,6 +29,8 @@ namespace CSharpLibraryTest.ViewModels
         public ReactiveProperty<Model3D> Light { get; } = new ReactiveProperty<Model3D>();
 
         public ReactiveProperty<Model3D> ModelData { get; } = new ReactiveProperty<Model3D>();
+
+        public ReactiveProperty<Model3D> MarkerData { get; } = new ReactiveProperty<Model3D>();
 
         // https://stackoverflow.com/questions/32885077/draw-point-where-mouse-clicked
         public ReactiveCommand<Point3D> ClickPoint { get; } = new ReactiveCommand<Point3D>();
@@ -82,7 +85,13 @@ namespace CSharpLibraryTest.ViewModels
 
         private void ClickModelPoints(Point3D p)
         {
-            var point = p;
+            var sphere = new SphereVisual3D();
+            sphere.Center = p;
+            sphere.Radius = 10.0;
+            sphere.Fill = new SolidColorBrush(Colors.Red);
+            sphere.UpdateModel();
+
+            MarkerData.Value = sphere.Model;
         }
     }
 }

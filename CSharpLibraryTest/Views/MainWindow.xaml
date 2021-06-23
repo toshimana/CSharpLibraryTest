@@ -30,6 +30,7 @@
             </Grid>
             <Viewport3D Grid.Column="1" Camera="{Binding Camera.Value}">
                 <ModelVisual3D Content="{Binding Light.Value}"/>
+                <ModelVisual3D Content="{Binding MarkerData.Value}"/>
                 <ModelVisual3D Content="{Binding ModelData.Value}"/>
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="MouseLeftButtonDown">

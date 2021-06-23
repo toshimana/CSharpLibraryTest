@@ -14,15 +14,19 @@ namespace CSharpLibraryTest
     public class MouseClickToMousePositionConverter : ReactiveConverter<MouseButtonEventArgs, Point3D>
     {
         private Point3D? _hitPosition = null;
+        private double _distance = 0.0;
         private HitTestResultBehavior ResultCallback(HitTestResult result)
         {
             RayHitTestResult rayResult = result as RayHitTestResult;
-            _hitPosition = null;
 
             if (rayResult != null)
             {
                 RayMeshGeometry3DHitTestResult rayMeshResult = rayResult as RayMeshGeometry3DHitTestResult;
-                _hitPosition = rayMeshResult.PointHit;
+                if (rayMeshResult.DistanceToRayOrigin < _distance)
+                {
+                    _hitPosition = rayMeshResult.PointHit;
+                    _distance = rayMeshResult.DistanceToRayOrigin;
+                }
             }
 
             return HitTestResultBehavior.Continue;
@@ -32,6 +36,8 @@ namespace CSharpLibraryTest
                 .Select(pos => new PointHitTestParameters(pos))
                 .Select(hitParams =>
                 {
+                    _hitPosition = null;
+                    _distance = double.MaxValue;
                     VisualTreeHelper.HitTest((Viewport3D)AssociateObject, null, ResultCallback, hitParams);
                     return _hitPosition;
                 })

@@ -4,6 +4,8 @@ using Reactive.Bindings;
 using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
@@ -27,10 +29,14 @@ namespace CSharpLibraryTest.ViewModels
 
         public ReactiveProperty<Model3D> ModelData { get; } = new ReactiveProperty<Model3D>();
 
+        // https://stackoverflow.com/questions/32885077/draw-point-where-mouse-clicked
+        public ReactiveCommand<Point3D> ClickPoint { get; } = new ReactiveCommand<Point3D>();
+
         public MainWindowViewModel()
         {
             ImageLoadCommand.Subscribe(LoadImage);
             ModelLoadCommand.Subscribe(LoadModel);
+            ClickPoint.Subscribe(ClickModelPoints);
 
             PerspectiveCamera camera = new PerspectiveCamera();
             camera.Position = new Point3D(0, 0, 2000);
@@ -62,7 +68,7 @@ namespace CSharpLibraryTest.ViewModels
             Image.Value = m;
             WideImage.Value = m;
         }
-        
+
         private void LoadModel()
         {
             if (ModelPath == null) return;
@@ -71,6 +77,12 @@ namespace CSharpLibraryTest.ViewModels
             var reader = new HelixToolkit.Wpf.StLReader();
             var ms = reader.Read(ModelPath.Value);
             ModelData.Value = ms.Children[0];
+        }
+
+
+        private void ClickModelPoints(Point3D p)
+        {
+            var point = p;
         }
     }
 }

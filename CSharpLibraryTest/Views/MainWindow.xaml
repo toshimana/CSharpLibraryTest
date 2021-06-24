@@ -10,12 +10,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <uc:PathLoader Grid.Row="0" Title="ImagePath" Path="{Binding ImagePath.Value}" LoadCommand="{Binding ImageLoadCommand}" PathFilter="PNG|*.png|JPEG|*.jpg"/>
         <uc:PathLoader Grid.Row="1" Title="ModelPath" Path="{Binding ModelPath.Value}" LoadCommand="{Binding ModelLoadCommand}" PathFilter="STL|*.stl"/>
-        <Grid Grid.Row="2">
+        <Button Grid.Row="2" Content="Save Model" HorizontalAlignment="Right" Click="Button_Click"/>
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -28,7 +30,7 @@
                 <uc:CvImage Grid.Row="0" MatImage="{Binding Image.Value}"/>
                 <uc:CvImage Grid.Row="1" MatImage="{Binding WideImage.Value}" MatStretch="Fill"/>
             </Grid>
-            <Viewport3D Grid.Column="1" Camera="{Binding Camera.Value}">
+            <Viewport3D x:Name="viewport" Grid.Column="1" Camera="{Binding Camera.Value}">
                 <ModelVisual3D Content="{Binding Light.Value}"/>
                 <ModelVisual3D Content="{Binding MarkerData.Value}"/>
                 <ModelVisual3D Content="{Binding ModelData.Value}"/>
@@ -41,6 +43,6 @@
                 </b:Interaction.Triggers>
             </Viewport3D>
         </Grid>
-        <ContentControl Grid.Row="3" prism:RegionManager.RegionName="ContentRegion" />
+        <ContentControl Grid.Row="4" prism:RegionManager.RegionName="ContentRegion" />
     </Grid>
 </Window>

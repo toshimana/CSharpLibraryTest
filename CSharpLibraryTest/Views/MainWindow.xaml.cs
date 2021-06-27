@@ -15,10 +15,8 @@ namespace CSharpLibraryTest.Views
         public MainWindow()
         {
             InitializeComponent();
-
-            var vm = DataContext as MainWindowViewModel;
-            vm.Initialize(() => System.Windows.MessageBox.Show("読み込みに失敗しました", "画像読み込み失敗", MessageBoxButton.OK, MessageBoxImage.Warning));
         }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new SaveFileDialog();

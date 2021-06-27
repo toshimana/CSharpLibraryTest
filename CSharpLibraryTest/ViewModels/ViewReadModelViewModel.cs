@@ -1,14 +1,9 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;

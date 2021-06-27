@@ -1,4 +1,5 @@
-﻿using CSharpLibraryTest.Views;
+﻿using CSharpLibraryTest.Services;
+using CSharpLibraryTest.Views;
 using HelixToolkit.Wpf;
 using OpenCvSharp;
 using Prism.Mvvm;
@@ -16,6 +17,7 @@ namespace CSharpLibraryTest.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private readonly IDialogService _dialogService;
+        private readonly IMessageService _messageService;
 
         public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>("CSharpLibraryTest");
         public ReactiveProperty<string> ImagePath { get; } = new ReactiveProperty<string>("");
@@ -25,8 +27,6 @@ namespace CSharpLibraryTest.ViewModels
 
         public ReactiveProperty<Mat> Image { get; } = new ReactiveProperty<Mat>();
         public ReactiveProperty<Mat> WideImage { get; } = new ReactiveProperty<Mat>();
-
-        private Func<MessageBoxResult> PathLoadFailDialog = () => MessageBoxResult.OK;
 
         public ReactiveProperty<Camera> Camera { get; } = new ReactiveProperty<Camera>();
         public ReactiveProperty<Model3D> Light { get; } = new ReactiveProperty<Model3D>();
@@ -39,8 +39,13 @@ namespace CSharpLibraryTest.ViewModels
         public ReactiveCommand<Point3D> ClickPoint { get; } = new ReactiveCommand<Point3D>();
 
         public MainWindowViewModel(IDialogService dialogService)
+            : this(dialogService, new MessageService())
+        { }
+
+        public MainWindowViewModel(IDialogService dialogService, IMessageService messageService)
         {
             this._dialogService = dialogService;
+            this._messageService = messageService;
 
             ImageLoadCommand.Subscribe(LoadImage);
             ModelLoadCommand.Subscribe(LoadModel);
@@ -59,17 +64,16 @@ namespace CSharpLibraryTest.ViewModels
             Light.Value = light;
         }
 
-        public void Initialize(Func<MessageBoxResult> pathLoadFailDialog)
-        {
-            PathLoadFailDialog = pathLoadFailDialog;
-        }
-
         private void LoadImage()
         {
-            Mat m = new Mat(ImagePath.Value);
-            if (m.Empty())
+            Mat m = null;
+            if (File.Exists(ImagePath.Value))
             {
-                PathLoadFailDialog();
+                m = new Mat(ImagePath.Value);
+            }
+            if (m == null || m.Empty())
+            {
+                this._messageService.ShowDialog("読み込みに失敗しました");
                 return;
             }
 
@@ -95,7 +99,6 @@ namespace CSharpLibraryTest.ViewModels
                 ModelData.Value = model;
             }
         }
-
 
         private void ClickModelPoints(Point3D p)
         {

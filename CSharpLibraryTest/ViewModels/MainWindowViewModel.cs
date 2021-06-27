@@ -1,6 +1,8 @@
-﻿using HelixToolkit.Wpf;
+﻿using CSharpLibraryTest.Views;
+using HelixToolkit.Wpf;
 using OpenCvSharp;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using System;
 using System.IO;
@@ -13,6 +15,8 @@ namespace CSharpLibraryTest.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
+        private readonly IDialogService _dialogService;
+
         public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>("CSharpLibraryTest");
         public ReactiveProperty<string> ImagePath { get; } = new ReactiveProperty<string>("");
         public ReactiveCommand ImageLoadCommand { get; } = new ReactiveCommand();
@@ -34,8 +38,10 @@ namespace CSharpLibraryTest.ViewModels
         // https://stackoverflow.com/questions/32885077/draw-point-where-mouse-clicked
         public ReactiveCommand<Point3D> ClickPoint { get; } = new ReactiveCommand<Point3D>();
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IDialogService dialogService)
         {
+            this._dialogService = dialogService;
+
             ImageLoadCommand.Subscribe(LoadImage);
             ModelLoadCommand.Subscribe(LoadModel);
             ClickPoint.Subscribe(ClickModelPoints);
@@ -76,17 +82,18 @@ namespace CSharpLibraryTest.ViewModels
             if (ModelPath == null) return;
             if (!File.Exists(ModelPath.Value)) return;
 
-            var reader = new HelixToolkit.Wpf.StLReader();
-            var ms = reader.Read(ModelPath.Value);
-            var gms = ms.Children[0] as GeometryModel3D;
+            var p = new DialogParameters();
+            p.Add(nameof(ViewReadModelViewModel.ReadModel), ModelPath.Value);
+            _dialogService.ShowDialog(nameof(ViewReadModel), p, ViewReadModelClose);
+        }
 
-            ImageBrush ib = new ImageBrush();
-            ib.ImageSource = new BitmapImage(new Uri(@"Image\Color.png", UriKind.Relative));
-            DiffuseMaterial dm = new DiffuseMaterial(ib);
-
-            gms.Material = dm;
-
-            ModelData.Value = gms;
+        private void ViewReadModelClose(IDialogResult dialogResult)
+        {
+            if (dialogResult.Result == ButtonResult.OK)
+            {
+                var model = dialogResult.Parameters.GetValue<GeometryModel3D>("Model");
+                ModelData.Value = model;
+            }
         }
 
 

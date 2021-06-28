@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using HelixToolkit.Wpf;
+using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using System;
@@ -21,6 +22,7 @@ namespace CSharpLibraryTest.ViewModels
         public string Title => "Read Model";
 
         public event Action<IDialogResult> RequestClose;
+        public Action<Action> Invoker;
 
         public ReactiveCommand CancelCommand { get; } = new ReactiveCommand();
         private ReactiveCommand<GeometryModel3D> ReadFinishCommand { get; } = new ReactiveCommand<GeometryModel3D>();
@@ -36,8 +38,6 @@ namespace CSharpLibraryTest.ViewModels
 
         public void OnDialogOpened(IDialogParameters parameters)
         {
-            var id = Task.CurrentId;
-
             string modelPath = parameters.GetValue<string>(nameof(ReadModel));
             _ = Task.Run(() =>
             {
@@ -56,8 +56,6 @@ namespace CSharpLibraryTest.ViewModels
 
         private void ReadFinishExecute(GeometryModel3D model)
         {
-            var id = Task.CurrentId;
-
             var p = new DialogParameters();
             p.Add("Model", model);
             this.RequestClose?.Invoke(new DialogResult(ButtonResult.OK, p));
@@ -65,7 +63,7 @@ namespace CSharpLibraryTest.ViewModels
 
         static public GeometryModel3D ReadModel(string path)
         {
-            var reader = new HelixToolkit.Wpf.StLReader();
+            var reader = new StLReader();
             var ms = reader.Read(path);
             var gms = ms.Children[0] as GeometryModel3D;
 

@@ -32,6 +32,7 @@ namespace CSharpLibraryTestUnitTest
             Assert.NotNull(_mw.Image.Value);
         }
 
+        // https://stackoverflow.com/questions/64770095/testing-prism-dialogservice
         [Fact]
         public void LoadModelTest()
         {
@@ -44,7 +45,7 @@ namespace CSharpLibraryTestUnitTest
             p.Add(nameof(ViewReadModelViewModel.ReadModel), @"");
 
             DialogResult receivedResult = null;
-            _dialogServiceMock.Object.ShowDialog(nameof(ViewReadModelViewModel), p, r => receivedResult = r as DialogResult);
+            _dialogServiceMock.Object.ShowDialog(nameof(ViewReadModelViewModelTest), p, r => receivedResult = r as DialogResult);
 
 
             Assert.Null(_mw.ModelData.Value);

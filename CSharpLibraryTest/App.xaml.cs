@@ -1,4 +1,5 @@
-﻿using CSharpLibraryTest.ViewModels;
+﻿using CSharpLibraryTest.Services;
+using CSharpLibraryTest.ViewModels;
 using CSharpLibraryTest.Views;
 using Prism.Ioc;
 using System.Windows;
@@ -18,6 +19,7 @@ namespace CSharpLibraryTest
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterDialog<ViewReadModel, ViewReadModelViewModel>();
+            containerRegistry.Register<IMessageService, MessageService>();
         }
     }
 }

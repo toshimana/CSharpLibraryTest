@@ -38,10 +38,6 @@ namespace CSharpLibraryTest.ViewModels
         // https://stackoverflow.com/questions/32885077/draw-point-where-mouse-clicked
         public ReactiveCommand<Point3D> ClickPoint { get; } = new ReactiveCommand<Point3D>();
 
-        public MainWindowViewModel(IDialogService dialogService)
-            : this(dialogService, new MessageService())
-        { }
-
         public MainWindowViewModel(IDialogService dialogService, IMessageService messageService)
         {
             this._dialogService = dialogService;

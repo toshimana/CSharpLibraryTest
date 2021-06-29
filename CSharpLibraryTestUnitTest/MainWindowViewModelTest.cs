@@ -36,24 +36,19 @@ namespace CSharpLibraryTestUnitTest
         [Fact]
         public void LoadModelTest()
         {
+            var dp = new DialogParameters();
+            dp.Add("Model", new GeometryModel3D());
+
             _dialogServiceMock.Setup(x => x.ShowDialog(It.IsAny<string>(), It.IsAny<IDialogParameters>(), It.IsAny<Action<IDialogResult>>()))
-                .Callback<string, IDialogParameters, Action<IDialogResult>>((n, p, c) => c(new DialogResult(ButtonResult.OK)));
-
-            var path = @"TestData\Hydrant.stl";
-
-            var p = new DialogParameters();
-            p.Add(nameof(ViewReadModelViewModel.ReadModel), @"");
-
-            DialogResult receivedResult = null;
-            _dialogServiceMock.Object.ShowDialog(nameof(ViewReadModelViewModelTest), p, r => receivedResult = r as DialogResult);
-
+                .Callback<string, IDialogParameters, Action<IDialogResult>>((n, p, c) => c(new DialogResult(ButtonResult.OK, dp)));
 
             Assert.Null(_mw.ModelData.Value);
 
+            var path = @"TestData\Hydrant.stl";
             _mw.ModelPath.Value = path;
             _mw.ModelLoadCommand.Execute();
 
-            Assert.Equal(ButtonResult.OK, receivedResult.Result);
+            Assert.NotNull(_mw.ModelData.Value);
         }
     }
 }

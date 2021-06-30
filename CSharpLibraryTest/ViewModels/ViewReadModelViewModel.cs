@@ -3,6 +3,9 @@ using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using System;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -15,17 +18,18 @@ namespace CSharpLibraryTest.ViewModels
     {
         public ViewReadModelViewModel()
         {
+            ReadFinishCommand = new ReactiveCommand<GeometryModel3D>();
+
             CancelCommand.Subscribe(CancelExecute);
-            ReadFinishCommand.Subscribe(ReadFinishExecute);
+            ReadFinishCommand.ObserveOnDispatcher().Subscribe(ReadFinishExecute);
         }
 
         public string Title => "Read Model";
 
         public event Action<IDialogResult> RequestClose;
-        public Action<Action> Invoker;
 
         public ReactiveCommand CancelCommand { get; } = new ReactiveCommand();
-        private ReactiveCommand<GeometryModel3D> ReadFinishCommand { get; } = new ReactiveCommand<GeometryModel3D>();
+        public ReactiveCommand<GeometryModel3D> ReadFinishCommand { get; }
 
         public bool CanCloseDialog()
         {
@@ -44,8 +48,7 @@ namespace CSharpLibraryTest.ViewModels
                 var id = Task.CurrentId;
                 var m = ReadModel(modelPath);
 
-                Application.Current.Dispatcher.Invoke(() =>
-                this.ReadFinishCommand.Execute(m));
+                this.ReadFinishCommand.Execute(m);
             });
         }
 
@@ -56,6 +59,9 @@ namespace CSharpLibraryTest.ViewModels
 
         private void ReadFinishExecute(GeometryModel3D model)
         {
+            if (model == null) return;
+
+            var id = Task.CurrentId;
             var p = new DialogParameters();
             p.Add("Model", model);
             this.RequestClose?.Invoke(new DialogResult(ButtonResult.OK, p));
